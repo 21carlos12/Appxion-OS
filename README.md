@@ -5,7 +5,6 @@ Bienvenido a **AppXionOS**, un sistema operativo de escritorio simulado, diseña
 ## Características Principales
 
 - **Arquitectura basada en Electron:** Utiliza las últimas capacidades de Electron, integrando Chromium y Node.js para un entorno de escritorio rápido, seguro y eficiente.
-- **Diseño Caelestia / Hyprland:** Incorpora una estética altamente cuidada inspirada en los ecosistemas Caelestia e interfaces minimalistas como Hyprland. Destacan los desenfoques (blur), animaciones fluidas, bordes redondeados y una interfaz moderna e inmersiva.
 - **Compatibilidad:** Diseñado específicamente para funcionar de manera óptima en entornos **Windows 10 y Windows 11**.
 
 ## Estructura del Proyecto
