@@ -1,0 +1,544 @@
+/* ==========================================================
+   Escritorio estilo KDE Plasma (tema Breeze oscuro)
+   Panel flotante, menú de aplicaciones, bandeja del sistema.
+   ========================================================== */
+
+:root {
+  --acento: #3daee9;
+  --acento-suave: rgba(61, 174, 233, 0.22);
+  --panel: transparent; /* 100% Transparente */
+  --popup: rgba(35, 38, 41, 0.75); /* Más cristalino para coincidir */
+  --linea: rgba(255, 255, 255, 0.09);
+  --texto: #eff0f1;
+  --texto-suave: #a5abb0;
+  --alto-panel: 52px;
+  --fuente: "Noto Sans", "Segoe UI", "Open Sans", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: #101a2e;
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 14px;
+  overflow: hidden;
+}
+
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+/* Los SVG auxiliares no ocupan espacio */
+.filtros { position: absolute; width: 0; height: 0; }
+
+.ico {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* ---------- Pantalla (aquí se aplica el filtro) ---------- */
+
+.pantalla {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ---------- Fondo de pantalla ---------- */
+
+.fondo {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 85% 10%, #4b3f9e 0%, transparent 55%),
+    radial-gradient(100% 80% at 10% 100%, #0e5a8a 0%, transparent 60%),
+    linear-gradient(160deg, #14213d 0%, #1b1f4b 55%, #2a1b4d 100%);
+  overflow: hidden;
+}
+
+.fondo__forma {
+  position: absolute;
+  border-radius: 38% 62% 55% 45% / 45% 40% 60% 55%;
+  filter: blur(2px);
+}
+.fondo__forma--a {
+  width: 70vmax; height: 70vmax; left: -20vmax; top: -30vmax;
+  background: linear-gradient(135deg, rgba(61, 174, 233, 0.30), rgba(61, 174, 233, 0));
+  transform: rotate(18deg);
+}
+.fondo__forma--b {
+  width: 60vmax; height: 60vmax; right: -22vmax; bottom: -28vmax;
+  background: linear-gradient(315deg, rgba(155, 89, 182, 0.38), rgba(155, 89, 182, 0));
+  transform: rotate(-24deg);
+}
+.fondo__forma--c {
+  width: 38vmax; height: 38vmax; right: 8vmax; top: -16vmax;
+  background: linear-gradient(200deg, rgba(29, 153, 243, 0.22), rgba(29, 153, 243, 0));
+  transform: rotate(40deg);
+}
+
+/* ---------- Iconos del escritorio ---------- */
+
+.escritorio {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  height: calc(100% - var(--alto-panel) - 20px);
+  padding: 20px;
+}
+
+.programa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 104px;
+  padding: 10px 6px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+.programa:hover { background: rgba(255, 255, 255, 0.10); border-color: var(--linea); }
+.programa:active { background: var(--acento-suave); border-color: var(--acento); }
+
+.programa__icono,
+.item__icono {
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.programa__icono {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.programa__icono .ico { width: 34px; height: 34px; }
+.programa__icono--notas, .item__icono--notas { background: linear-gradient(145deg, #f7b733, #e67e22); }
+.programa__icono--calc,  .item__icono--calc  { background: linear-gradient(145deg, #4cc3ff, #1d6fd1); }
+
+.programa__nombre {
+  font-size: 13px;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- Panel flotante ---------- */
+
+.panel {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  height: var(--alto-panel);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+}
+
+.panel__inicio,
+.bandeja__ico {
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: var(--texto);
+}
+.panel__inicio .ico { width: 26px; height: 26px; color: var(--acento); }
+.panel__inicio:hover, button.bandeja__ico:hover { background: rgba(255, 255, 255, 0.12); }
+.panel__inicio.activo, button.bandeja__ico.activo { background: var(--acento-suave); box-shadow: inset 0 0 0 1px var(--acento); }
+
+
+
+/* ---------- Bandeja del sistema ---------- */
+
+.bandeja { display: flex; align-items: center; gap: 2px; }
+.bandeja__ico { width: 34px; color: var(--texto); }
+.bandeja__ico .ico { width: 21px; height: 21px; }
+span.bandeja__ico:hover { background: rgba(255, 255, 255, 0.08); }
+.bandeja__ico--bateria { color: #7ddc8a; }
+
+.reloj {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 6px;
+  padding: 3px 10px;
+  border-radius: 9px;
+  line-height: 1.15;
+}
+.reloj b { font-size: 14px; font-weight: 600; }
+.reloj small { font-size: 11px; color: var(--texto-suave); }
+.reloj:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* ---------- Popups ---------- */
+
+.popup {
+  position: absolute;
+  bottom: calc(var(--alto-panel) + 22px);
+  padding: 14px;
+  background: var(--popup);
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.popup[hidden] { display: none; }
+
+.popup__titulo {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.menu-inicio { left: 12px; width: 380px; }
+.popup-acc { right: 12px; width: 280px; }
+.popup-power { left: 12px; width: 240px; bottom: calc(var(--alto-panel) + 22px); }
+
+/* Lista de apps con scroll */
+.apps-lista {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--linea) transparent;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+.apps-lista::-webkit-scrollbar { width: 5px; }
+.apps-lista::-webkit-scrollbar-thumb { background: var(--linea); border-radius: 4px; }
+
+
+.buscador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  margin-bottom: 14px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  color: var(--texto-suave);
+}
+.buscador:focus-within { border-color: var(--acento); }
+.buscador .ico { width: 18px; height: 18px; }
+.buscador input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; }
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+.item:hover { background: var(--acento-suave); border-color: rgba(61, 174, 233, 0.5); }
+.item small { display: block; color: var(--texto-suave); font-size: 12px; }
+.item__icono { width: 40px; height: 40px; border-radius: 11px; }
+.item__icono .ico { width: 22px; height: 22px; }
+
+.menu-inicio__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--linea);
+  color: var(--texto-suave);
+}
+.boton-icono {
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  background: transparent; border: 0; border-radius: 9px;
+}
+.boton-icono .ico { width: 20px; height: 20px; }
+.boton-icono:hover { background: rgba(231, 76, 60, 0.25); color: #ff8a7a; }
+
+/* ---------- Controles de accesibilidad ---------- */
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.interruptor {
+  position: relative;
+  width: 44px; height: 24px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.18);
+  border: 0;
+  border-radius: 12px;
+}
+.interruptor__bola {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+}
+.interruptor[aria-pressed="true"] { background: var(--acento); }
+.interruptor[aria-pressed="true"] .interruptor__bola { left: 23px; }
+
+.selector {
+  height: 32px;
+  padding: 0 10px;
+  background: #2b2f33;
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+
+.popup__estado {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+/* ==========================================================
+   Filtros de daltonismo (pruebas de accesibilidad)
+   Se activan con <html data-cvd="tipo">
+   ========================================================== */
+
+html[data-cvd="protanopia"] .pantalla   { filter: url(#cvd-protanopia); }
+html[data-cvd="deuteranopia"] .pantalla { filter: url(#cvd-deuteranopia); }
+html[data-cvd="tritanopia"] .pantalla   { filter: url(#cvd-tritanopia); }
+html[data-cvd="acromatopsia"] .pantalla { filter: url(#cvd-acromatopsia); }
+
+/* ---------- Pantallas pequeñas ---------- */
+
+@media (max-width: 720px) {
+  .reloj small, .bandeja__ico--bateria { display: none; }
+  .menu-inicio, .popup-acc { left: 12px; right: 12px; width: auto; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .interruptor, .interruptor__bola { transition: all 0.15s ease; }
+}
+
+
+/* ==========================================================
+   Mejoras: popups de bandeja, calendario, avisos
+   ========================================================== */
+
+button.reloj { background: transparent; border: 0; color: inherit; font: inherit; }
+button.reloj:hover, button.reloj.activo { background: rgba(255, 255, 255, 0.12); }
+
+.popup-wifi, .popup-vol, .popup-cal { right: 12px; }
+.popup-wifi { width: 320px; }
+.popup-vol { width: 290px; }
+.popup-cal { width: 300px; }
+
+.item[hidden], .vacio[hidden], .toast[hidden] { display: none; }
+.item--activa { background: var(--acento-suave); border-color: rgba(61, 174, 233, 0.5); }
+.item__icono--red { background: rgba(255, 255, 255, 0.10); color: var(--acento); }
+.item--activa .item__icono--red { background: var(--acento); color: #04202e; }
+.vacio { margin: 10px 8px; color: var(--texto-suave); }
+
+#vol { flex: 1; accent-color: var(--acento); }
+#vol-val { min-width: 42px; text-align: right; }
+
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+.cal span { padding: 7px 0; border-radius: 8px; font-size: 13px; }
+.cal .sem { color: var(--texto-suave); font-size: 11px; font-weight: 600; }
+.cal .hoy { background: var(--acento); color: #04202e; font-weight: 700; }
+
+
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--alto-panel) + 26px);
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  background: var(--popup);
+  border: 1px solid var(--linea);
+  border-left: 3px solid var(--acento);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.panel { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.25); }
+.programa__icono { transition: transform 0.12s ease; }
+.programa:hover .programa__icono { transform: translateY(-2px); }
+::selection { background: var(--acento); color: #04202e; }
+
+/* --- Batería: porcentaje en la bandeja --- */
+.bandeja__ico--bateria {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.bateria-pct {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  min-width: 24px;
+  text-align: left;
+  color: var(--texto-suave);
+  transition: color 0.3s;
+}
+/* Estados de color */
+.bateria--baja    { color: #e74c3c; }
+.bateria--baja    .bateria-pct { color: #e74c3c; }
+.bateria--baja    .ico { stroke: #e74c3c; }
+
+.bateria--media   .bateria-pct { color: #f39c12; }
+.bateria--media   .ico { stroke: #f39c12; }
+
+.bateria--alta    .bateria-pct { color: #2ecc71; }
+.bateria--alta    .ico { stroke: #2ecc71; }
+
+.bateria--cargando .bateria-pct { color: var(--acento); }
+.bateria--cargando .ico { stroke: var(--acento); }
+
+/* --- Menú Contextual --- */
+.menu-contextual {
+  position: absolute;
+  z-index: 1000;
+  background: var(--popup);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  padding: 6px;
+  min-width: 180px;
+}
+.menu-contextual[hidden] { display: none; }
+.menu-contextual button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--texto);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.menu-contextual button:hover {
+  background: var(--acento-suave);
+}
+
+/* --- Pantalla de Bloqueo --- */
+.pantalla-bloqueo {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(16, 26, 46, 0.6);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s;
+}
+.pantalla-bloqueo[hidden] { display: none; }
+.login-box {
+  background: rgba(35, 38, 41, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  width: 320px;
+}
+.login-box h2 { margin-top: 0; font-weight: 500; }
+.login-box input, .login-box select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  outline: none;
+}
+.login-box select option {
+  background: #2b2f33;
+  color: #fff;
+}
+.login-box input:focus, .login-box select:focus { border-color: var(--acento); }
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--acento);
+  color: #04202e;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.login-box button:hover { filter: brightness(1.1); }
+
+/* --- Íconos reales de apps en el buscador --- */
+.app-icon-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+  display: block;
+}
+
+/* Spinner mientras el ícono se carga via IPC */
+.app-icon-loading {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: spin-icon 0.7s linear infinite;
+}
+
+@keyframes spin-icon {
+  to { transform: rotate(360deg); }
+}
+
+/* Asegurar que item__icono aloje iconos de 32px */
+.item__icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}

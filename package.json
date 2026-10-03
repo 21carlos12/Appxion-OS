@@ -1,0 +1,36 @@
+{
+  "name": "appxion-os",
+  "version": "1.0.0",
+  "description": "AppXionOS - Sistema Operativo de Escritorio",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "author": "AppXionOS",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.4.3",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.appxion.os",
+    "productName": "AppXionOS",
+    "compression": "store",
+    "files": [
+      "package.json",
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js",
+      "styles.css",
+      "AppxionOS.ico"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "AppxionOS.ico"
+    }
+  }
+}
